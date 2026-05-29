@@ -125,11 +125,17 @@ body {
 }
 
 .emblem {
-  width: 180px;
-  height: 180px;
+  width: 220px;
+  height: 220px;
   margin-bottom: 2.5rem;
-  filter: drop-shadow(0 0 30px rgba(201, 168, 76, 0.4));
+  border-radius: 50%;
+  border: 2px solid var(--border-bright);
+  box-shadow:
+    0 0 0 6px rgba(201, 168, 76, 0.08),
+    0 0 40px rgba(201, 168, 76, 0.35),
+    0 0 80px rgba(201, 168, 76, 0.15);
   animation: float 6s ease-in-out infinite;
+  object-fit: cover;
 }
 
 .hero-eyebrow {

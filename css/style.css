@@ -478,6 +478,8 @@ body {
   transform: translateY(0);
 }
 
+
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
   #navbar {

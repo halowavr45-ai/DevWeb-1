@@ -80,7 +80,7 @@
           At least three Imperial Fists Strike Cruisers took part in the attack on the Chaos forces located at the Peleon's Belt Heretic anchorage.
         </p>
       </div>
-      <div class="lore-card fade-in">
+      <div class="lore-card fade-in" id="successors-card">
         <h3 class="lore-card-title">Successors</h3>
         <p class="lore-card-text">
           Though Rogal Dorn was lost to the Imperium subsequent to the war-torn age of the Horus Heresy, 
@@ -144,6 +144,30 @@
       </div>
     </div>
   </section>-->
+
+  <style>
+  #successors-card {
+    background-image: url('assets/images/successors.jpg');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    position: relative;
+    /* Garde le fond sombre semi-transparent pour lisibilité */
+  }
+  #successors-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 15, 0.65);
+    z-index: 0;
+    pointer-events: none;
+  }
+  #successors-card h3,
+  #successors-card p {
+    position: relative;
+    z-index: 1;
+  }
+</style>
 
   <!-- FOOTER -->
   <footer class="site-footer">

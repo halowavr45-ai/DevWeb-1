@@ -52,14 +52,14 @@
     <p class="section-intro fade-in">Founders of fortresses. Masters of siege. Builders of the Imperium.</p>
 
     <div class="lore-grid">
-      <div class="lore-card fade-in">
+      <div class="lore-card fade-in" id="origines-card">
         <h3 class="lore-card-title">Origines</h3>
         <p class="lore-card-text">
           The Imperial Fists are one of the First Founding Chapters of the Space Marines and were originally 
           the VII Legion of the Legiones Astartes raised by the Emperor Himself from across Terra during the Unification Wars.
         </p>
       </div>
-      <div class="lore-card fade-in">
+      <div class="lore-card fade-in" id="doctrine-card">
         <h3 class="lore-card-title">Doctrine</h3>
         <p class="lore-card-text">
           Dorn and his Legion proved the masters of every aspect of warfare, 
@@ -69,7 +69,7 @@
           the ﬂames of which were wantonly fanned by Fulgrim, the primarch of the Emperor's Children Legion.
         </p>
       </div>
-      <div class="lore-card fade-in">
+      <div class="lore-card fade-in" id="fleet-card">
         <h3 class="lore-card-title">The Eternal Fleet</h3>
         <p class="lore-card-text">
           The space fleets and warships of the Imperial Fists were the greatest of the age. 
@@ -146,14 +146,19 @@
   </section>-->
 
   <style>
+  #origines-card,
+  #doctrine-card,
+  #fleet-card,
   #successors-card {
-    background-image: url('assets/images/successors.jpg');
     background-size: cover;
-    background-position: center top;
+    background-position: center;
     background-repeat: no-repeat;
     position: relative;
-    /* Garde le fond sombre semi-transparent pour lisibilité */
   }
+
+  #origines-card::after,
+  #doctrine-card::after,
+  #fleet-card::after,
   #successors-card::after {
     content: '';
     position: absolute;
@@ -162,10 +167,28 @@
     z-index: 0;
     pointer-events: none;
   }
-  #successors-card h3,
-  #successors-card p {
+
+  #origines-card h3, #origines-card p,
+  #doctrine-card h3, #doctrine-card p,
+  #fleet-card h3, #fleet-card p,
+  #successors-card h3, #successors-card p {
     position: relative;
     z-index: 1;
+  }
+
+  #origines-card {
+    background-image: url('assets/images/origines.jpg');
+    background-position: center top;
+  }
+  #doctrine-card {
+    background-image: url('assets/images/doctrine.jpg');
+  }
+  #fleet-card {
+    background-image: url('assets/images/fleet.jpg');
+  }
+  #successors-card {
+    background-image: url('assets/images/successors.jpg');
+    background-position: center top;
   }
 </style>
 

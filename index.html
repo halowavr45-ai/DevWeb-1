@@ -95,7 +95,7 @@
   </section>
 
   <!-- CITATION -->
-  <blockquote class="quote-section">
+  <blockquote class="quote-section" id="quote-section">
     <span class="quote-mark">"</span>
     <p class="quote-text">
       The time for speeches is done, The first great test is here. 
@@ -190,6 +190,29 @@
     background-image: url('assets/images/successors.jpg');
     background-position: center top;
   }
+  #quote-section {
+  background-image: url('assets/images/quote-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+    }
+    #quote-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 15, 0.75);
+    z-index: 0;
+    pointer-events: none;
+    }
+
+    #quote-section .quote-mark,
+    #quote-section .quote-text,
+    #quote-section .quote-attr {
+    position: relative;
+    z-index: 1;
+    }
+
 </style>
 
   <!-- FOOTER -->

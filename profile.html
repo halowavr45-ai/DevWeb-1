@@ -253,6 +253,13 @@
       color: var(--text-muted);
       padding: 2rem;
     }
+
+    #loading.error-state {
+      color: #e88585;
+      letter-spacing: 0.1em;
+      font-size: 0.75rem;
+      line-height: 1.8;
+    }
   </style>
 </head>
 <body>
@@ -264,7 +271,7 @@
       <p class="brand-sub">Battle Honours</p>
     </div>
 
-    <div id="loading">Loading...</div>
+    <div id="loading">Chargement...</div>
 
     <div class="card" id="profile-card" style="display:none;">
       <div class="avatar-section">
@@ -287,7 +294,7 @@
           <label>Email</label>
           <input type="email" id="input-email" disabled>
         </div>
-        <button class="btn" type="submit" id="btn-save">Saving</button>
+        <button class="btn" type="submit" id="btn-save">Sauvegarder</button>
         <button class="btn btn-logout" type="button" onclick="handleLogout()">Logout</button>
       </form>
     </div>
@@ -306,33 +313,68 @@
     let currentProfile = null;
     let newAvatarFile = null;
 
+    function showLoadingError(message) {
+      const el = document.getElementById('loading');
+      el.classList.add('error-state');
+      el.innerHTML = message;
+    }
+
     async function init() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { window.location.href = 'login.html'; return; }
+      // 1. Vérification de la session
+      let session;
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        session = data.session;
+      } catch (err) {
+        showLoadingError('Erreur de connexion à Supabase.<br>' + err.message);
+        return;
+      }
+
+      if (!session) {
+        window.location.href = 'login.html';
+        return;
+      }
 
       currentUser = session.user;
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', currentUser.id)
-        .single();
+      // 2. Récupération du profil
+      let profile;
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (error) throw error;
+        if (!data) throw new Error('Aucun profil trouvé pour cet utilisateur.');
+        profile = data;
+      } catch (err) {
+        showLoadingError(
+          'Impossible de charger votre profil.<br>' +
+          '<small style="opacity:0.7">' + err.message + '</small><br><br>' +
+          '<a href="index.html" style="color:var(--gold);font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.2em;">← Retour au site</a>'
+        );
+        return;
+      }
 
       currentProfile = profile;
 
+      // 3. Affichage
       document.getElementById('loading').style.display = 'none';
       document.getElementById('profile-card').style.display = 'block';
 
-      document.getElementById('input-Username').value = profile.Username;
-      document.getElementById('input-email').value = currentUser.email;
+      document.getElementById('input-Username').value = profile.Username || '';
+      document.getElementById('input-email').value = currentUser.email || '';
       document.getElementById('Username-display').innerHTML =
-        `${profile.Username}<span>#${profile.discriminator}</span>`;
+        `${profile.Username || '—'}<span>#${profile.discriminator || '0000'}</span>`;
 
       if (profile.avatar_url) {
         document.getElementById('avatar-preview').src = profile.avatar_url;
       } else {
         document.getElementById('avatar-preview').src =
-          `https://api.dicebear.com/7.x/bottts/svg?seed=${profile.Username}`;
+          `https://api.dicebear.com/7.x/bottts/svg?seed=${profile.Username || currentUser.id}`;
       }
     }
 
@@ -387,7 +429,7 @@
         currentProfile.Username = Username;
         currentProfile.avatar_url = avatar_url;
         document.getElementById('Username-display').innerHTML =
-          `${Username}<span>#${currentProfile.discriminator}</span>`;
+          `${Username}<span>#${currentProfile.discriminator || '0000'}</span>`;
         showMsg('Profil mis à jour, Frère.', 'success');
       }
 

@@ -223,14 +223,14 @@
 
     <div class="card">
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('login')">Login</button>
-        <button class="tab" onclick="switchTab('register')">Register</button>
+        <button class="tab active" id="tab-login">Login</button>
+        <button class="tab" id="tab-register">Register</button>
       </div>
 
       <div id="msg" class="msg"></div>
 
       <!-- LOGIN -->
-      <form class="form active" id="form-login" onsubmit="handleLogin(event)">
+      <form class="form active" id="form-login">
         <div class="field">
           <label>Email</label>
           <input type="email" id="login-email" placeholder="your@email.com" required>
@@ -243,10 +243,10 @@
       </form>
 
       <!-- REGISTER -->
-      <form class="form" id="form-register" onsubmit="handleRegister(event)">
+      <form class="form" id="form-register">
         <div class="field">
           <label>Username</label>
-          <input type="text" id="reg-Username" placeholder="YourName" required minlength="3" maxlength="20">
+          <input type="text" id="reg-username" placeholder="YourName" required minlength="3" maxlength="20">
         </div>
         <div class="field">
           <label>Email</label>
@@ -275,10 +275,13 @@
       if (data.session) window.location.href = 'profile.html';
     });
 
+    // Tabs
+    document.getElementById('tab-login').addEventListener('click', () => switchTab('login'));
+    document.getElementById('tab-register').addEventListener('click', () => switchTab('register'));
+
     function switchTab(tab) {
-      document.querySelectorAll('.tab').forEach((t, i) => {
-        t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
-      });
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('tab-register').classList.toggle('active', tab === 'register');
       document.getElementById('form-login').classList.toggle('active', tab === 'login');
       document.getElementById('form-register').classList.toggle('active', tab === 'register');
       hideMsg();
@@ -298,11 +301,12 @@
       return String(Math.floor(1000 + Math.random() * 9000));
     }
 
-    async function handleLogin(e) {
+    // Login
+    document.getElementById('form-login').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btn-login');
       btn.disabled = true;
-      btn.textContent = 'Connexion...';
+      btn.textContent = 'Connecting...';
 
       const { error } = await supabase.auth.signInWithPassword({
         email: document.getElementById('login-email').value,
@@ -310,22 +314,23 @@
       });
 
       if (error) {
-        showMsg('Email ou Password incorrect.', 'error');
+        showMsg('Incorrect email or password.', 'error');
         btn.disabled = false;
-        btn.textContent = 'Entrer dans la Phalange';
+        btn.textContent = 'Enter the Legion';
       } else {
-        showMsg('Connexion réussie, Frère.', 'success');
+        showMsg('Welcome back, Brother.', 'success');
         setTimeout(() => window.location.href = 'profile.html', 1000);
       }
-    }
+    });
 
-    async function handleRegister(e) {
+    // Register
+    document.getElementById('form-register').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btn-register');
       btn.disabled = true;
-      btn.textContent = 'Enregistrement...';
+      btn.textContent = 'Registering...';
 
-      const Username = document.getElementById('reg-Username').value.trim();
+      const pseudo = document.getElementById('reg-username').value.trim();
       const email = document.getElementById('reg-email').value;
       const password = document.getElementById('reg-password').value;
       const discriminator = generateDiscriminator();
@@ -335,27 +340,26 @@
       if (error) {
         showMsg(error.message, 'error');
         btn.disabled = false;
-        btn.textContent = 'Rejoindre le Chapitre';
+        btn.textContent = 'Join the Chapter';
         return;
       }
 
-      // Créer le profil
       const { error: profileError } = await supabase.from('profiles').insert({
         id: data.user.id,
-        Username,
+        pseudo,
         discriminator,
         avatar_url: null,
       });
 
       if (profileError) {
-        showMsg('Compte créé mais erreur profil : ' + profileError.message, 'error');
+        showMsg('Account created but profile error: ' + profileError.message, 'error');
       } else {
-        showMsg(`Bienvenue ${Username}#${discriminator} ! Vérifie ton email pour confirmer.`, 'success');
+        showMsg(`Welcome ${pseudo}#${discriminator} ! Check your email to confirm.`, 'success');
       }
 
       btn.disabled = false;
-      btn.textContent = 'Rejoindre le Chapitre';
-    }
+      btn.textContent = 'Join the Chapter';
+    });
   </script>
 </body>
 </html>

@@ -19,11 +19,11 @@ const fadeEls = document.querySelectorAll('.fade-in');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
     if (entry.isIntersecting) {
-      // Léger décalage en cascade pour les éléments siblings
       setTimeout(() => {
         entry.target.classList.add('visible');
       }, i * 80);
-      observer.unobserve(entry.target);
+    } else {
+      entry.target.classList.remove('visible');
     }
   });
 }, { threshold: 0.15 });

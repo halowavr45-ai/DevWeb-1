@@ -24,7 +24,7 @@
   <!-- HERO -->
   <section class="hero" id="hero">
     <div class="hero-bg" style="background-image: url('assets/images/hero-bg.jpg'); background-size: cover; background-position: center;"></div>
-    <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); z-index: 0; pointer-events: none;"></div> background-size: cover; background-position: center;"></div>
+    <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); z-index: 0; pointer-events: none;"></div>
     <div class="hero-content">
 
       <img class="emblem" src="assets/images/fist.png" alt="Emblème Imperial Fists">
@@ -49,14 +49,14 @@
 
   <!-- LORE -->
   <section class="lore-section" id="lore" style="background-image: url('assets/images/lore-bg.jpg'); background-size: cover; background-position: center; position: relative;">
-  <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 0; pointer-events: none;"></div>
-  <div style="position: absolute; top: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to top, transparent, #0a0a0f); pointer-events: none; z-index: 2;"></div>
-  <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to bottom, transparent, #0a0a0f); pointer-events: none; z-index: 2;"></div>
-    <p class="section-label">Chapter Lore</p>
-    <h2 class="section-title fade-in">The Heirs of Rogal Dorn</h2>
-    <p class="section-intro fade-in">Founders of fortresses. Masters of siege. Builders of the Imperium.</p>
+    <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 0; pointer-events: none;"></div>
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to bottom, #0a0a0f, transparent); pointer-events: none; z-index: 3;"></div>
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to top, #0a0a0f, transparent); pointer-events: none; z-index: 3;"></div>
+    <p class="section-label" style="position: relative; z-index: 1;">Chapter Lore</p>
+    <h2 class="section-title fade-in" style="position: relative; z-index: 1;">The Heirs of Rogal Dorn</h2>
+    <p class="section-intro fade-in" style="position: relative; z-index: 1;">Founders of fortresses. Masters of siege. Builders of the Imperium.</p>
 
-    <div class="lore-grid">
+    <div class="lore-grid" style="position: relative; z-index: 1;">
       <div class="lore-card fade-in" id="origines-card" style="min-height: 500px;">
         <h3 class="lore-card-title">Origines</h3>
         <p class="lore-card-text">
@@ -162,23 +162,21 @@
     background-repeat: no-repeat;
     position: relative;
   }
-    #quote-section::after {
+  #quote-section::after {
     content: '';
     position: absolute;
     inset: 0;
     background: rgba(10, 10, 15, 0.75);
     z-index: 0;
     pointer-events: none;
-    }
-
-    #quote-section .quote-mark,
-    #quote-section .quote-text,
-    #quote-section .quote-attr {
+  }
+  #quote-section .quote-mark,
+  #quote-section .quote-text,
+  #quote-section .quote-attr {
     position: relative;
     z-index: 1;
-    }
-
-</style>
+  }
+  </style>
 
   <!-- FOOTER -->
   <footer class="site-footer">

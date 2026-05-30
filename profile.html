@@ -365,16 +365,16 @@
       document.getElementById('loading').style.display = 'none';
       document.getElementById('profile-card').style.display = 'block';
 
-      document.getElementById('input-Username').value = profile.Username || '';
+      document.getElementById('input-Username').value = profile.pseudo || '';
       document.getElementById('input-email').value = currentUser.email || '';
       document.getElementById('Username-display').innerHTML =
-        `${profile.Username || '—'}<span>#${profile.discriminator || '0000'}</span>`;
+        `${profile.pseudo || '—'}<span>#${profile.discriminator || '0000'}</span>`;
 
       if (profile.avatar_url) {
         document.getElementById('avatar-preview').src = profile.avatar_url;
       } else {
         document.getElementById('avatar-preview').src =
-          `https://api.dicebear.com/7.x/bottts/svg?seed=${profile.Username || currentUser.id}`;
+          `https://api.dicebear.com/7.x/bottts/svg?seed=${profile.pseudo || currentUser.id}`;
       }
     }
 
@@ -395,7 +395,7 @@
       btn.disabled = true;
       btn.textContent = 'Sauvegarde...';
 
-      const Username = document.getElementById('input-Username').value.trim();
+      const pseudo = document.getElementById('input-Username').value.trim();
       let avatar_url = currentProfile.avatar_url;
 
       // Upload avatar si changé
@@ -420,16 +420,16 @@
 
       const { error } = await supabase
         .from('profiles')
-        .update({ Username, avatar_url })
+        .update({ pseudo, avatar_url })
         .eq('id', currentUser.id);
 
       if (error) {
         showMsg('Erreur : ' + error.message, 'error');
       } else {
-        currentProfile.Username = Username;
+        currentProfile.pseudo = pseudo;
         currentProfile.avatar_url = avatar_url;
         document.getElementById('Username-display').innerHTML =
-          `${Username}<span>#${currentProfile.discriminator || '0000'}</span>`;
+          `${pseudo}<span>#${currentProfile.discriminator || '0000'}</span>`;
         showMsg('Profil mis à jour, Frère.', 'success');
       }
 

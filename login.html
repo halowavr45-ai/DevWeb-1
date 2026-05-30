@@ -331,7 +331,7 @@
         btn.disabled = true;
         btn.textContent = 'Registering...';
 
-        const Username = document.getElementById('reg-username').value.trim();
+        const pseudo = document.getElementById('reg-username').value.trim();
         const email = document.getElementById('reg-email').value;
         const password = document.getElementById('reg-password').value;
         const discriminator = generateDiscriminator();
@@ -355,7 +355,7 @@
 
         const { error: profileError } = await supabase.from('profiles').insert({
           id: data.user.id,
-          Username,
+          pseudo,
           discriminator,
           avatar_url: null,
         });
@@ -363,7 +363,7 @@
         if (profileError) {
           showMsg('Account created but profile error: ' + profileError.message, 'error');
         } else {
-          showMsg(`Welcome ${Username}#${discriminator} ! Check your email to confirm.`, 'success');
+          showMsg(`Welcome ${pseudo}#${discriminator} ! Check your email to confirm.`, 'success');
         }
 
         btn.disabled = false;

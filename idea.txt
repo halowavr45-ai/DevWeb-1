@@ -1,0 +1,39 @@
+  <!-- DOGMES -->
+  <!--<section class="dogmas-section" id="dogmas">
+    <p class="section-label">Code de fer</p>
+    <h2 class="section-title fade-in">Les Dogmes du Chapitre</h2>
+    <p class="section-intro fade-in">Chaque Battle-Brother porte ces vérités gravées dans son âme.</p>
+
+    <div class="dogma-list">
+      <div class="dogma-item fade-in">
+        <div class="dogma-num">I</div>
+        <h3 class="dogma-title">Ne pas plier</h3>
+        <p class="dogma-text">Sous la pression, sous la peur, sous le nombre. Un Battle-Brother ne recule jamais.</p>
+      </div>
+      <div class="dogma-item fade-in">
+        <div class="dogma-num">II</div>
+        <h3 class="dogma-title">Construire pour l'Éternité</h3>
+        <p class="dogma-text">Toute fortification doit survivre à son architecte. Bâtir, c'est prier.</p>
+      </div>
+      <div class="dogma-item fade-in">
+        <div class="dogma-num">III</div>
+        <h3 class="dogma-title">Souffrir avec dignité</h3>
+        <p class="dogma-text">La douleur purifie. La faiblesse est un ennemi plus redoutable que tout adversaire.</p>
+      </div>
+      <div class="dogma-item fade-in">
+        <div class="dogma-num">IV</div>
+        <h3 class="dogma-title">Servir l'Imperium</h3>
+        <p class="dogma-text">L'Humanité est notre charge. Chaque cité debout est un monument à notre serment.</p>
+      </div>
+      <div class="dogma-item fade-in">
+        <div class="dogma-num">V</div>
+        <h3 class="dogma-title">Honorer Rogal Dorn</h3>
+        <p class="dogma-text">Le Primarque fit don de lui-même pour Terra. Nous lui rendons hommage à chaque engagement.</p>
+      </div>
+      <div class="dogma-item fade-in">
+        <div class="dogma-num">VI</div>
+        <h3 class="dogma-title">La Fraternité avant tout</h3>
+        <p class="dogma-text">Le frère à ta gauche, à ta droite — il est ta vraie armure.</p>
+      </div>
+    </div>
+  </section>-->

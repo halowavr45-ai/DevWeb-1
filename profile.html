@@ -299,7 +299,8 @@
   <script>
     const SUPABASE_URL = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZ3dncnNscG1tbm1ndHd6cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxNjM3NDcsImV4cCI6MjA5NTczOTc0N30.oGAQVRdp52Ay3rhmgOJzVRP24jQU50jtk9HPH38Poyc';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    const { createClient } = window.supabase;
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
     let currentUser = null;
     let currentProfile = null;

@@ -265,101 +265,111 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
-    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZ3dncnNscG1tbm1ndHd6cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxNjM3NDcsImV4cCI6MjA5NTczOTc0N30.oGAQVRdp52Ay3rhmgOJzVRP24jQU50jtk9HPH38Poyc';
-    const { createClient } = window.supabase;
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+    (function () {
+      const SUPABASE_URL = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
+      const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZ3dncnNscG1tbm1ndHd6cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxNjM3NDcsImV4cCI6MjA5NTczOTc0N30.oGAQVRdp52Ay3rhmgOJzVRP24jQU50jtk9HPH38Poyc';
+      const { createClient } = window.supabase;
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-    // Rediriger si déjà connecté
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) window.location.href = 'profile.html';
-    });
-
-    // Tabs
-    document.getElementById('tab-login').addEventListener('click', () => switchTab('login'));
-    document.getElementById('tab-register').addEventListener('click', () => switchTab('register'));
-
-    function switchTab(tab) {
-      document.getElementById('tab-login').classList.toggle('active', tab === 'login');
-      document.getElementById('tab-register').classList.toggle('active', tab === 'register');
-      document.getElementById('form-login').classList.toggle('active', tab === 'login');
-      document.getElementById('form-register').classList.toggle('active', tab === 'register');
-      hideMsg();
-    }
-
-    function showMsg(text, type) {
-      const el = document.getElementById('msg');
-      el.textContent = text;
-      el.className = `msg ${type} show`;
-    }
-
-    function hideMsg() {
-      document.getElementById('msg').className = 'msg';
-    }
-
-    function generateDiscriminator() {
-      return String(Math.floor(1000 + Math.random() * 9000));
-    }
-
-    // Login
-    document.getElementById('form-login').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('btn-login');
-      btn.disabled = true;
-      btn.textContent = 'Connecting...';
-
-      const { error } = await supabase.auth.signInWithPassword({
-        email: document.getElementById('login-email').value,
-        password: document.getElementById('login-password').value,
+      // Rediriger si déjà connecté
+      supabase.auth.getSession().then(({ data }) => {
+        if (data.session) window.location.href = 'profile.html';
       });
 
-      if (error) {
-        showMsg('Incorrect email or password.', 'error');
-        btn.disabled = false;
-        btn.textContent = 'Enter the Legion';
-      } else {
-        showMsg('Welcome back, Brother.', 'success');
-        setTimeout(() => window.location.href = 'profile.html', 1000);
+      // Tabs
+      document.getElementById('tab-login').addEventListener('click', () => switchTab('login'));
+      document.getElementById('tab-register').addEventListener('click', () => switchTab('register'));
+
+      function switchTab(tab) {
+        document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+        document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+        document.getElementById('form-login').classList.toggle('active', tab === 'login');
+        document.getElementById('form-register').classList.toggle('active', tab === 'register');
+        hideMsg();
       }
-    });
 
-    // Register
-    document.getElementById('form-register').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('btn-register');
-      btn.disabled = true;
-      btn.textContent = 'Registering...';
+      function showMsg(text, type) {
+        const el = document.getElementById('msg');
+        el.textContent = text;
+        el.className = `msg ${type} show`;
+      }
 
-      const pseudo = document.getElementById('reg-username').value.trim();
-      const email = document.getElementById('reg-email').value;
-      const password = document.getElementById('reg-password').value;
-      const discriminator = generateDiscriminator();
+      function hideMsg() {
+        document.getElementById('msg').className = 'msg';
+      }
 
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      function generateDiscriminator() {
+        return String(Math.floor(1000 + Math.random() * 9000));
+      }
 
-      if (error) {
-        showMsg(error.message, 'error');
+      // Login
+      document.getElementById('form-login').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-login');
+        btn.disabled = true;
+        btn.textContent = 'Connecting...';
+
+        const { error } = await supabase.auth.signInWithPassword({
+          email: document.getElementById('login-email').value,
+          password: document.getElementById('login-password').value,
+        });
+
+        if (error) {
+          showMsg('Incorrect email or password.', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Enter the Legion';
+        } else {
+          showMsg('Welcome back, Brother.', 'success');
+          setTimeout(() => window.location.href = 'profile.html', 1000);
+        }
+      });
+
+      // Register
+      document.getElementById('form-register').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-register');
+        btn.disabled = true;
+        btn.textContent = 'Registering...';
+
+        const pseudo = document.getElementById('reg-username').value.trim();
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+        const discriminator = generateDiscriminator();
+
+        const { data, error } = await supabase.auth.signUp({ email, password });
+
+        if (error) {
+          showMsg(error.message, 'error');
+          btn.disabled = false;
+          btn.textContent = 'Join the Chapter';
+          return;
+        }
+
+        // Si confirmation email activée, data.user peut être null
+        if (!data.user) {
+          showMsg('Compte créé ! Vérifie ton email pour confirmer.', 'success');
+          btn.disabled = false;
+          btn.textContent = 'Join the Chapter';
+          return;
+        }
+
+        const { error: profileError } = await supabase.from('profiles').insert({
+          id: data.user.id,
+          pseudo,
+          discriminator,
+          avatar_url: null,
+        });
+
+        if (profileError) {
+          showMsg('Account created but profile error: ' + profileError.message, 'error');
+        } else {
+          showMsg(`Welcome ${pseudo}#${discriminator} ! Check your email to confirm.`, 'success');
+        }
+
         btn.disabled = false;
         btn.textContent = 'Join the Chapter';
-        return;
-      }
-
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: data.user.id,
-        pseudo,
-        discriminator,
-        avatar_url: null,
       });
-
-      if (profileError) {
-        showMsg('Account created but profile error: ' + profileError.message, 'error');
-      } else {
-        showMsg(`Welcome ${pseudo}#${discriminator} ! Check your email to confirm.`, 'success');
-      }
-
-      btn.disabled = false;
-      btn.textContent = 'Join the Chapter';
-    });
+    })();
   </script>
 </body>
 </html>

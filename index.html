@@ -19,6 +19,12 @@
       <li><a href="#lore">Lore</a></li>
       <!--<li><a href="#dogmas">Infos</a></li>-->
       <li><a href="login.html" id="nav-login">Login</a></li>
+      <li id="nav-contacts-li" style="display:none;">
+        <a href="contacts.html" class="nav-contacts-btn" id="nav-contacts-btn" title="Contacts &amp; Messagerie">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Contacts</span>
+        </a>
+      </li>
       <li id="nav-profile-li" style="display:none;">
         <a href="profile.html" class="nav-profile-btn" id="nav-profile-btn">
           <img class="nav-profile-avatar" id="nav-avatar" src="" alt="Avatar">
@@ -168,6 +174,35 @@
   #quote-section .quote-text,
   #quote-section .quote-attr { position: relative; z-index: 1; }
 
+  /* ─── NAV CONTACTS BUTTON ─── */
+  .nav-contacts-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: transparent;
+    border: 1px solid rgba(201, 168, 76, 0.35);
+    padding: 0.38rem 0.75rem;
+    text-decoration: none;
+    transition: border-color 0.25s, background 0.25s, color 0.25s;
+    color: #C9A84C;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .nav-contacts-btn:hover {
+    border-color: rgba(201, 168, 76, 0.8);
+    background: rgba(201, 168, 76, 0.07);
+    color: #E8CC85;
+  }
+  .nav-contacts-btn svg {
+    color: #C9A84C;
+    flex-shrink: 0;
+  }
+  .nav-contacts-btn:hover svg {
+    color: #E8CC85;
+  }
+
   /* ─── NAV PROFILE BUTTON ─── */
   .nav-profile-btn {
     display: flex;
@@ -252,6 +287,7 @@
       document.getElementById('nav-avatar').src         = avatar;
 
       document.getElementById('nav-login').parentElement.style.display = 'none';
+      document.getElementById('nav-contacts-li').style.display = '';
       document.getElementById('nav-profile-li').style.display = '';
     }
 

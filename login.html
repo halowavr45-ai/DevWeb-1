@@ -186,9 +186,9 @@
       display: none;
     }
 
-    .msg.error { border-color: #c94c4c; background: rgba(201, 76, 76, 0.05); color: #e88585; }
+    .msg.error   { border-color: #c94c4c; background: rgba(201, 76, 76, 0.05); color: #e88585; }
     .msg.success { border-color: #4cc97a; background: rgba(76, 201, 122, 0.05); color: #85e8a8; }
-    .msg.show { display: block; }
+    .msg.show    { display: block; }
 
     .divider {
       width: 80px;
@@ -266,17 +266,17 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     (function () {
-      const SUPABASE_URL = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
+      const SUPABASE_URL  = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
       const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZ3dncnNscG1tbm1ndHd6cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxNjM3NDcsImV4cCI6MjA5NTczOTc0N30.oGAQVRdp52Ay3rhmgOJzVRP24jQU50jtk9HPH38Poyc';
       const { createClient } = window.supabase;
       const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-      // Rediriger si déjà connecté
+      // ─── Rediriger si déjà connecté ────────────────────────────────────────
       supabase.auth.getSession().then(({ data }) => {
         if (data.session) window.location.href = 'profile.html';
       });
 
-      // Tabs
+      // ─── Tabs ───────────────────────────────────────────────────────────────
       document.getElementById('tab-login').addEventListener('click', () => switchTab('login'));
       document.getElementById('tab-register').addEventListener('click', () => switchTab('register'));
 
@@ -302,72 +302,93 @@
         return String(Math.floor(1000 + Math.random() * 9000));
       }
 
-      // Login
+      // ─── LOGIN ──────────────────────────────────────────────────────────────
       document.getElementById('form-login').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btn-login');
-        btn.disabled = true;
+        btn.disabled    = true;
         btn.textContent = 'Connecting...';
 
         const { error } = await supabase.auth.signInWithPassword({
-          email: document.getElementById('login-email').value,
+          email:    document.getElementById('login-email').value,
           password: document.getElementById('login-password').value,
         });
 
         if (error) {
           showMsg('Incorrect email or password.', 'error');
-          btn.disabled = false;
+          btn.disabled    = false;
           btn.textContent = 'Enter the Legion';
-        } else {
-          showMsg('Welcome back, Brother.', 'success');
-          setTimeout(() => window.location.href = 'profile.html', 1000);
+          return;
         }
+
+        // ✅ On attend que Supabase confirme la session avant de rediriger
+        showMsg('Welcome back, Brother.', 'success');
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+          if (event === 'SIGNED_IN' && session) {
+            subscription.unsubscribe(); // on se désabonne pour éviter les doublons
+            window.location.href = 'profile.html';
+          }
+        });
       });
 
-      // Register
+      // ─── REGISTER ───────────────────────────────────────────────────────────
       document.getElementById('form-register').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btn-register');
-        btn.disabled = true;
+        btn.disabled    = true;
         btn.textContent = 'Registering...';
 
-        const pseudo = document.getElementById('reg-username').value.trim();
-        const email = document.getElementById('reg-email').value;
-        const password = document.getElementById('reg-password').value;
+        const pseudo        = document.getElementById('reg-username').value.trim();
+        const email         = document.getElementById('reg-email').value;
+        const password      = document.getElementById('reg-password').value;
         const discriminator = generateDiscriminator();
 
         const { data, error } = await supabase.auth.signUp({ email, password });
 
         if (error) {
           showMsg(error.message, 'error');
-          btn.disabled = false;
+          btn.disabled    = false;
           btn.textContent = 'Join the Chapter';
           return;
         }
 
-        // Si confirmation email activée, data.user peut être null
+        // Confirmation email activée → data.user peut être null
         if (!data.user) {
           showMsg('Compte créé ! Vérifie ton email pour confirmer.', 'success');
-          btn.disabled = false;
+          btn.disabled    = false;
           btn.textContent = 'Join the Chapter';
           return;
         }
 
+        // Création du profil en base
         const { error: profileError } = await supabase.from('profiles').insert({
-          id: data.user.id,
+          id:          data.user.id,
           pseudo,
           discriminator,
-          avatar_url: null,
+          avatar_url:  null,
         });
 
         if (profileError) {
           showMsg('Account created but profile error: ' + profileError.message, 'error');
-        } else {
-          showMsg(`Welcome ${pseudo}#${discriminator} ! Check your email to confirm.`, 'success');
+          btn.disabled    = false;
+          btn.textContent = 'Join the Chapter';
+          return;
         }
 
-        btn.disabled = false;
-        btn.textContent = 'Join the Chapter';
+        // ✅ Même logique que le login : on attend la session confirmée
+        showMsg(`Welcome ${pseudo}#${discriminator} ! Redirecting...`, 'success');
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+          if (event === 'SIGNED_IN' && session) {
+            subscription.unsubscribe();
+            window.location.href = 'profile.html';
+          }
+        });
+
+        // Fallback si l'event ne se déclenche pas (confirmation email requise)
+        setTimeout(() => {
+          btn.disabled    = false;
+          btn.textContent = 'Join the Chapter';
+        }, 3000);
       });
     })();
   </script>

@@ -319,7 +319,7 @@
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZ3dncnNscG1tbm1ndHd6cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxNjM3NDcsImV4cCI6MjA5NTczOTc0N30.oGAQVRdp52Ay3rhmgOJzVRP24jQU50jtk9HPH38Poyc';
     const { createClient } = window.supabase;
     window._sb = window._sb || createClient(SUPABASE_URL, SUPABASE_ANON);
-    const supabase = window._sb;
+    const sb = window._sb;
     console.log('[DIAG] ✅ Client Supabase créé');
 
     let currentUser    = null;
@@ -348,7 +348,7 @@
       let session;
       try {
         console.log('[DIAG] Appel getSession()...');
-        const { data, error } = await supabase.auth.getSession();
+        const { data, error } = await sb.auth.getSession();
         console.log('[DIAG] getSession() résultat :', { data, error });
 
         if (error) throw error;
@@ -377,7 +377,7 @@
       let profile;
       try {
         console.log('[DIAG] Appel profiles.select() pour id =', currentUser.id);
-        const { data, error } = await supabase
+        const { data, error } = await sb
           .from('profiles')
           .select('*')
           .eq('id', currentUser.id)
@@ -455,7 +455,7 @@
         const path = `avatars/${currentUser.id}.${ext}`;
         console.log('[DIAG] Upload avatar vers :', path);
 
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await sb.storage
           .from('avatars')
           .upload(path, newAvatarFile, { upsert: true });
 
@@ -467,7 +467,7 @@
           return;
         }
 
-        const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path);
+        const { data: urlData } = sb.storage.from('avatars').getPublicUrl(path);
         avatar_url    = urlData.publicUrl;
         newAvatarFile = null;
         console.log('[DIAG] ✅ Avatar uploadé, URL :', avatar_url);
@@ -475,7 +475,7 @@
 
       // Mise à jour du profil
       console.log('[DIAG] Update profil :', { pseudo, avatar_url });
-      const { error } = await supabase
+      const { error } = await sb
         .from('profiles')
         .update({ pseudo, avatar_url })
         .eq('id', currentUser.id);
@@ -499,7 +499,7 @@
     // ─── LOGOUT ───────────────────────────────────────────────────────────────
     async function handleLogout() {
       console.log('[DIAG] Logout...');
-      await supabase.auth.signOut();
+      await sb.auth.signOut();
       window.location.href = 'index.html';
     }
 

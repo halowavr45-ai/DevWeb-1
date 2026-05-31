@@ -345,11 +345,11 @@
           .from('profiles')
           .select('*')
           .eq('id', currentUser.id)
-          .single();
+          .maybeSingle();
 
         if (error) throw error;
-        if (!data) throw new Error('Aucun profil trouvé pour cet utilisateur.');
-        profile = data;
+        // Si pas de ligne profil, on crée un profil vide par défaut
+        profile = data || { id: currentUser.id, pseudo: '', discriminator: '0000', avatar_url: null };
       } catch (err) {
         showLoadingError(
           'Impossible de charger votre profil.<br>' +

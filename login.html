@@ -321,14 +321,19 @@
           return;
         }
 
-        // ✅ On attend que Supabase confirme la session avant de rediriger
+        // ✅ Session confirmée par signInWithPassword → redirect immédiat
         showMsg('Welcome back, Brother.', 'success');
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-          if (event === 'SIGNED_IN' && session) {
-            subscription.unsubscribe(); // on se désabonne pour éviter les doublons
+        // On vérifie que la session est bien en place avant de rediriger
+        const waitForSession = async () => {
+          const { data } = await supabase.auth.getSession();
+          if (data.session) {
             window.location.href = 'profile.html';
+          } else {
+            // Réessaie toutes les 200ms jusqu'à 5 secondes max
+            setTimeout(waitForSession, 200);
           }
-        });
+        };
+        waitForSession();
       });
 
       // ─── REGISTER ───────────────────────────────────────────────────────────
@@ -375,20 +380,17 @@
           return;
         }
 
-        // ✅ Même logique que le login : on attend la session confirmée
+        // ✅ On poll la session jusqu'à ce qu'elle soit disponible
         showMsg(`Welcome ${pseudo}#${discriminator} ! Redirecting...`, 'success');
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-          if (event === 'SIGNED_IN' && session) {
-            subscription.unsubscribe();
+        const waitForSessionReg = async () => {
+          const { data: sessionData } = await supabase.auth.getSession();
+          if (sessionData.session) {
             window.location.href = 'profile.html';
+          } else {
+            setTimeout(waitForSessionReg, 200);
           }
-        });
-
-        // Fallback si l'event ne se déclenche pas (confirmation email requise)
-        setTimeout(() => {
-          btn.disabled    = false;
-          btn.textContent = 'Join the Chapter';
-        }, 3000);
+        };
+        waitForSessionReg();
       });
     })();
   </script>

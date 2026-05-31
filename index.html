@@ -1,119 +1,190 @@
-<!-- ─── AUTH NAV — à coller juste avant </body> dans index.html ─── -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-  /* Cache le lien login par défaut, affiché par JS si pas de session */
-  #nav-login { display: none; }
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imperial Fists — Chapter Adeptus Astartes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-  .nav-profile-btn {
-    display: none; /* affiché par JS si session */
-    align-items: center;
-    gap: 0.55rem;
-    background: transparent;
-    border: 1px solid rgba(201, 168, 76, 0.35);
-    padding: 0.3rem 0.75rem 0.3rem 0.3rem;
-    cursor: pointer;
-    text-decoration: none;
-    transition: border-color 0.25s, background 0.25s;
-    color: var(--gold, #C9A84C);
-  }
+  <!-- NAVIGATION -->
+  <nav id="navbar">
+    <a class="nav-brand" href="#hero">Imperial Fists</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu">&#9776;</button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#lore">Lore</a></li>
+      <li><a href="#dogmas">Infos</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
 
-  .nav-profile-btn:hover {
-    border-color: rgba(201, 168, 76, 0.8);
-    background: rgba(201, 168, 76, 0.07);
-  }
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" style="background-image: url('assets/images/hero-bg.jpg'); background-size: cover; background-position: center;"></div>
+    <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.55); z-index: 0; pointer-events: none;"></div>
+    <div class="hero-content">
 
-  .nav-profile-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1px solid rgba(201, 168, 76, 0.5);
-    display: block;
-    flex-shrink: 0;
-  }
+      <img class="emblem" src="assets/images/fist.png" alt="Emblème Imperial Fists">
 
-  .nav-profile-info {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
+      <p class="hero-eyebrow">Adeptus Astartes — VIIth Legion</p>
+      <h1 class="hero-title">Imperial Fists</h1>
+      <p class="hero-subtitle">Terra's Shield</p>
+      <div class="hero-divider"></div>
+      <p class="hero-desc">
+        The Imperial Fists are one of the First Founding Chapters of the Space Marines and were originally 
+        the VII Legion of the Legiones Astartes raised by the Emperor Himself from across Terra during the Unification Wars
+      </p>
+      <a href="#lore" class="hero-cta">Discover the Chapter</a>
+    </div>
 
-  .nav-profile-pseudo {
-    font-family: 'Cinzel', serif;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    color: #E8CC85;
-    white-space: nowrap;
-  }
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to bottom, transparent, #0a0a0f); pointer-events: none;"></div>
+  </section>
 
-  .nav-profile-disc {
-    font-family: 'Cinzel', serif;
-    font-size: 0.52rem;
-    letter-spacing: 0.08em;
-    color: #A89870;
-    white-space: nowrap;
-  }
-</style>
-<script>
-(function () {
-  const SUPABASE_URL  = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
-  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZ3dncnNscG1tbm1ndHd6cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxNjM3NDcsImV4cCI6MjA5NTczOTc0N30.oGAQVRdp52Ay3rhmgOJzVRP24jQU50jtk9HPH38Poyc';
-  const { createClient } = window.supabase;
-  window._sb = window._sb || createClient(SUPABASE_URL, SUPABASE_ANON);
-  const sb = window._sb;
+  <!-- LORE -->
+  <section class="lore-section" id="lore" style="background-image: url('assets/images/lore-bg.jpg'); background-size: cover; background-position: center; position: relative;">
+    <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 0; pointer-events: none;"></div>
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to bottom, #0a0a0f, transparent); pointer-events: none; z-index: 3;"></div>
+    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 120px; background: linear-gradient(to top, #0a0a0f, transparent); pointer-events: none; z-index: 3;"></div>
+    <p class="section-label" style="position: relative; z-index: 1;">Chapter Lore</p>
+    <h2 class="section-title fade-in" style="position: relative; z-index: 1;">The Heirs of Rogal Dorn</h2>
+    <p class="section-intro fade-in" style="position: relative; z-index: 1;">Founders of fortresses. Masters of siege. Builders of the Imperium.</p>
 
-  async function initNav() {
-    const { data: { session } } = await sb.auth.getSession();
-    const loginLink = document.getElementById('nav-login');
-
-    if (!session) {
-      // Pas connecté → afficher le lien Login normal
-      if (loginLink) loginLink.style.display = '';
-      return;
-    }
-
-    const user = session.user;
-
-    // Récupère le profil
-    const { data: profile } = await sb
-      .from('profiles')
-      .select('pseudo, discriminator, avatar_url')
-      .eq('id', user.id)
-      .maybeSingle();
-
-    const pseudo = profile?.pseudo || user.email?.split('@')[0] || '—';
-    const disc   = profile?.discriminator || '0000';
-    const avatar = profile?.avatar_url
-      || `https://api.dicebear.com/7.x/bottts/svg?seed=${pseudo}`;
-
-    // Crée le bouton profil
-    const btn = document.createElement('a');
-    btn.href = 'profile.html';
-    btn.className = 'nav-profile-btn';
-    btn.style.display = 'flex';
-    btn.innerHTML = `
-      <img class="nav-profile-avatar" src="${avatar}" alt="Avatar">
-      <div class="nav-profile-info">
-        <span class="nav-profile-pseudo">${pseudo}</span>
-        <span class="nav-profile-disc">#${disc}</span>
+    <div class="lore-grid" style="position: relative; z-index: 1;">
+      <div class="lore-card fade-in" id="origines-card" style="min-height: 500px;">
+        <h3 class="lore-card-title">Origines</h3>
+        <p class="lore-card-text">
+          The Imperial Fists are one of the First Founding Chapters of the Space Marines and were originally 
+          the VII Legion of the Legiones Astartes raised by the Emperor Himself from across Terra during the Unification Wars.
+        </p>
       </div>
-    `;
+      <div class="lore-card fade-in" id="doctrine-card" style="min-height: 500px;">
+        <h3 class="lore-card-title">Doctrine</h3>
+        <p class="lore-card-text">
+          Dorn and his Legion proved the masters of every aspect of warfare, 
+          but in particular the Imperial Fists excelled at siege craft, 
+          whether on the attack or the defence. 
+          This propelled them into a bitter rivalry with the Iron Warriors Legion and their jealous primarch Perturabo, 
+          the ﬂames of which were wantonly fanned by Fulgrim, the primarch of the Emperor's Children Legion.
+        </p>
+      </div>
+      <div class="lore-card fade-in" id="fleet-card" style="min-height: 500px;">
+        <h3 class="lore-card-title">The Eternal Fleet</h3>
+        <p class="lore-card-text">
+          The space fleets and warships of the Imperial Fists were the greatest of the age. 
+          While Phalanx may be the greatest warship ever built by Human hands, 
+          there were other warships, both great and small, whose renown reaches down through the annals of history even to this day. 
+          The Imperial Fists' Chapter fleet includes the Gothic-class Cruiser Imperial Power, 
+          as well as Cobra-class Destroyers which are used as Escorts. 
+          At least three Imperial Fists Strike Cruisers took part in the attack on the Chaos forces located at the Peleon's Belt Heretic anchorage.
+        </p>
+      </div>
+      <div class="lore-card fade-in" id="successors-card" style="min-height: 500px;">
+        <h3 class="lore-card-title">Successors</h3>
+        <p class="lore-card-text">
+          Though Rogal Dorn was lost to the Imperium subsequent to the war-torn age of the Horus Heresy, 
+          his legacy remains one of the strongest of all of the primarchs. 
+          The Imperial Fists sired three Second Founding Successor Chapters -- 
+          the Imperial Fists themselves, the Crimson Fists and the Black Templars. 
+          Between them, these three Chapters hold as many battle honours as dozens of later created Adeptus Astartes formations, 
+          and their brethren have served with skill and distinction on countless thousands of battlefields across the galaxy.
+        </p>
+      </div>
+    </div>
+  </section>
 
-    // Insère à la place du lien Login
-    if (loginLink) {
-      loginLink.parentNode.insertBefore(btn, loginLink);
-      loginLink.style.display = 'none';
-    } else {
-      // Fallback : ajoute à la fin de nav-links
-      const navLinks = document.getElementById('nav-links');
-      if (navLinks) navLinks.appendChild(document.createElement('li')).appendChild(btn);
-    }
+  <!-- CITATION -->
+  <blockquote class="quote-section" id="quote-section">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">
+      The time for speeches is done, The first great test is here. 
+      My order to you all is simple, yet heed it well, and exert yourselves to see it done.
+      They are coming. Kill them all.
+    </p>
+    <cite class="quote-attr">— Rogal Dorn, opening stages of the siege of Terra</cite>
+  </blockquote>
+
+  <style>
+  #origines-card,
+  #doctrine-card,
+  #fleet-card,
+  #successors-card {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNav);
-  } else {
-    initNav();
+  #origines-card::after,
+  #doctrine-card::after,
+  #fleet-card::after,
+  #successors-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 15, 0.65);
+    z-index: 0;
+    pointer-events: none;
   }
-})();
-</script>
+
+  #origines-card h3, #origines-card p,
+  #doctrine-card h3, #doctrine-card p,
+  #fleet-card h3, #fleet-card p,
+  #successors-card h3, #successors-card p {
+    position: relative;
+    z-index: 1;
+  }
+
+  #origines-card {
+    background-image: url('assets/images/origines.jpeg');
+    background-position: center top;
+  }
+  #doctrine-card {
+    background-image: url('assets/images/doctrine.jpg');
+  }
+  #fleet-card {
+    background-image: url('assets/images/fleet.jpg');
+  }
+  #successors-card {
+    background-image: url('assets/images/successors.jpg');
+    background-position: center top;
+  }
+  #quote-section {
+    background-image: url('assets/images/quote.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+  #quote-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 15, 0.75);
+    z-index: 0;
+    pointer-events: none;
+  }
+  #quote-section .quote-mark,
+  #quote-section .quote-text,
+  #quote-section .quote-attr {
+    position: relative;
+    z-index: 1;
+  }
+  </style>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p class="footer-sigil">Imperial Fists</p>
+    <p class="footer-motto">Primvs Inter Pares — Semper Fidelis — In Dorn We Trust</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

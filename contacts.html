@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imperial Fists — Brotherhood</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8CC85;
+      --gold-dark: #8B6914;
+      --obsidian: #0A0A0B;
+      --obsidian-2: #111115;
+      --obsidian-3: #1A1A22;
+      --stone: #2A2A35;
+      --text-main: #F5EDD5;
+      --text-muted: #A89870;
+      --border: rgba(201, 168, 76, 0.25);
+      --border-bright: rgba(201, 168, 76, 0.6);
+      --green: #4cc97a;
+      --red: #c94c4c;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--obsidian);
+      color: var(--text-main);
+      font-family: 'Crimson Text', Georgia, serif;
+      min-height: 100vh;
+      padding-top: 64px;
+    }
+
+    /* ─── BACKGROUND ─── */
+    .bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 30%, rgba(201, 168, 76, 0.04) 0%, transparent 70%),
+        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(201, 168, 76, 0.015) 80px),
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(201, 168, 76, 0.015) 80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── NAV ─── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 11, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-brand {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+    .nav-profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: transparent;
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      padding: 0.3rem 0.75rem 0.3rem 0.3rem;
+      text-decoration: none;
+      transition: border-color 0.25s, background 0.25s;
+      color: #C9A84C;
+    }
+
+    .nav-profile-btn:hover {
+      border-color: rgba(201, 168, 76, 0.8);
+      background: rgba(201, 168, 76, 0.07);
+    }
+
+    .nav-profile-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(201, 168, 76, 0.5);
+    }
+
+    .nav-profile-info { display: flex; flex-direction: column; line-height: 1.1; }
+    .nav-profile-pseudo { font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.1em; color: #E8CC85; }
+    .nav-profile-disc { font-family: 'Cinzel', serif; font-size: 0.52rem; letter-spacing: 0.08em; color: #A89870; }
+
+    /* ─── LAYOUT ─── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 4rem;
+    }
+
+    /* ─── HEADER ─── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .page-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .page-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 2rem;
+      color: var(--gold-light);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .header-divider {
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 1rem auto;
+    }
+
+    .page-sub {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ─── SEARCH BAR ─── */
+    .search-wrap {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .search-input {
+      flex: 1;
+      background: var(--obsidian-2);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-family: 'Crimson Text', serif;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus { border-color: var(--gold); }
+    .search-input::placeholder { color: var(--text-muted); opacity: 0.5; }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.3s, background 0.3s;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+      z-index: -1;
+    }
+
+    .btn:hover { color: var(--obsidian); }
+    .btn:hover::before { transform: translateX(0); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-sm {
+      padding: 0.4rem 0.9rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+    }
+
+    .btn-danger {
+      border-color: rgba(201, 76, 76, 0.5);
+      color: var(--red);
+    }
+
+    .btn-danger::before { background: var(--red); }
+    .btn-danger:hover { color: white; }
+
+    .btn-success {
+      border-color: rgba(76, 201, 122, 0.5);
+      color: var(--green);
+    }
+
+    .btn-success::before { background: var(--green); }
+    .btn-success:hover { color: var(--obsidian); }
+
+    /* ─── TABS ─── */
+    .tabs-row {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      gap: 0;
+    }
+
+    .tab-btn {
+      padding: 0.7rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--obsidian);
+      font-family: 'Cinzel', serif;
+      font-size: 0.5rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      margin-left: 0.4rem;
+      border-radius: 2px;
+    }
+
+    /* ─── PANELS ─── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ─── MSG FEEDBACK ─── */
+    .msg {
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      border-left: 3px solid var(--gold);
+      background: rgba(201, 168, 76, 0.05);
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+
+    .msg.error { border-color: var(--red); background: rgba(201, 76, 76, 0.05); color: #e88585; }
+    .msg.success { border-color: var(--green); background: rgba(76, 201, 122, 0.05); color: #85e8a8; }
+    .msg.show { display: block; }
+
+    /* ─── MEMBER CARDS ─── */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .member-card {
+      background: var(--obsidian-3);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .member-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 0;
+      background: var(--gold);
+      transition: height 0.3s;
+    }
+
+    .member-card:hover {
+      border-color: var(--border-bright);
+      background: rgba(26, 26, 34, 0.8);
+    }
+
+    .member-card:hover::before { height: 100%; }
+
+    .member-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid var(--border-bright);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .member-info { flex: 1; min-width: 0; }
+
+    .member-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--gold-light);
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .member-disc {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .member-status {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--stone);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .member-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    /* ─── CONTACT ITEM (liste contacts) ─── */
+    .contact-item {
+      background: var(--obsidian-3);
+      border: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.2s;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-item:hover { border-color: var(--border-bright); }
+
+    /* ─── REQUEST ITEM ─── */
+    .request-item {
+      background: var(--obsidian-3);
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .request-item::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 0;
+      width: 3px; height: 3px;
+      background: var(--gold);
+    }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.4;
+    }
+
+    .empty-state-text {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    /* ─── LOADING ─── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--obsidian-3) 25%, var(--stone) 50%, var(--obsidian-3) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 2px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .loading-card {
+      background: var(--obsidian-3);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* ─── SECTION LABEL ─── */
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    @media (max-width: 640px) {
+      #navbar { padding: 0 1.25rem; }
+      .nav-links { gap: 1rem; }
+      .members-grid { grid-template-columns: 1fr; }
+      .page-title { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a class="nav-brand" href="index.html">Imperial Fists</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html#lore">Lore</a></li>
+      <li><a href="contacts.html" class="active">Brotherhood</a></li>
+      <li><a href="messages.html">Messages</a></li>
+      <li><a href="login.html" id="nav-login">Login</a></li>
+      <li id="nav-profile-li" style="display:none;">
+        <a href="profile.html" class="nav-profile-btn" id="nav-profile-btn">
+          <img class="nav-profile-avatar" id="nav-avatar" src="" alt="Avatar">
+          <div class="nav-profile-info">
+            <span class="nav-profile-pseudo" id="nav-pseudo">—</span>
+            <span class="nav-profile-disc" id="nav-disc">#0000</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-header">
+      <span class="page-label">Adeptus Astartes</span>
+      <h1 class="page-title">Brotherhood</h1>
+      <div class="header-divider"></div>
+      <p class="page-sub">Find and befriend your fellow Battle-Brothers</p>
+    </div>
+
+    <div id="msg-global" class="msg"></div>
+
+    <!-- TABS -->
+    <div class="tabs-row">
+      <button class="tab-btn active" data-tab="search">Search Brothers</button>
+      <button class="tab-btn" data-tab="contacts">My Contacts</button>
+      <button class="tab-btn" data-tab="requests">
+        Requests
+        <span class="tab-badge" id="requests-badge" style="display:none">0</span>
+      </button>
+    </div>
+
+    <!-- PANEL: SEARCH -->
+    <div class="panel active" id="panel-search">
+      <div class="search-wrap">
+        <input type="text" class="search-input" id="search-input" placeholder="Search by username...">
+        <button class="btn" id="btn-search">Search</button>
+      </div>
+      <div id="search-results" class="members-grid"></div>
+    </div>
+
+    <!-- PANEL: CONTACTS -->
+    <div class="panel" id="panel-contacts">
+      <span class="section-label">Battle-Brothers</span>
+      <div id="contacts-list"></div>
+    </div>
+
+    <!-- PANEL: REQUESTS -->
+    <div class="panel" id="panel-requests">
+      <span class="section-label">Pending Requests</span>
+      <div id="requests-list"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  (function () {
+    const SUPABASE_URL  = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZ3dncnNscG1tbm1ndHd6cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxNjM3NDcsImV4cCI6MjA5NTczOTc0N30.oGAQVRdp52Ay3rhmgOJzVRP24jQU50jtk9HPH38Poyc';
+    const { createClient } = window.supabase;
+    window._sb = window._sb || createClient(SUPABASE_URL, SUPABASE_ANON);
+    const sb = window._sb;
+
+    let currentUser = null;
+    let myContacts  = new Set();
+    let myPending   = new Set(); // requests sent by me
+
+    // ─── UTILS ────────────────────────────────────────────────────────────────
+    function avatarUrl(profile) {
+      return profile.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${profile.pseudo || profile.id}`;
+    }
+
+    function showMsg(text, type) {
+      const el = document.getElementById('msg-global');
+      el.textContent = text;
+      el.className = `msg ${type} show`;
+      setTimeout(() => { el.className = 'msg'; }, 4000);
+    }
+
+    // ─── TABS ─────────────────────────────────────────────────────────────────
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+        if (btn.dataset.tab === 'contacts') loadContacts();
+        if (btn.dataset.tab === 'requests') loadRequests();
+      });
+    });
+
+    // ─── NAV INIT ─────────────────────────────────────────────────────────────
+    async function initNav(user) {
+      const { data: profile } = await sb.from('profiles').select('pseudo,discriminator,avatar_url').eq('id', user.id).maybeSingle();
+      const pseudo = profile?.pseudo || user.email?.split('@')[0] || '—';
+      const disc   = profile?.discriminator || '0000';
+      const avatar = profile?.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${pseudo}`;
+      document.getElementById('nav-pseudo').textContent = pseudo;
+      document.getElementById('nav-disc').textContent   = '#' + disc;
+      document.getElementById('nav-avatar').src         = avatar;
+      document.getElementById('nav-login').parentElement.style.display = 'none';
+      document.getElementById('nav-profile-li').style.display = '';
+    }
+
+    // ─── SEARCH ───────────────────────────────────────────────────────────────
+    document.getElementById('btn-search').addEventListener('click', doSearch);
+    document.getElementById('search-input').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+    async function doSearch() {
+      const q = document.getElementById('search-input').value.trim();
+      if (q.length < 2) { showMsg('Enter at least 2 characters.', 'error'); return; }
+
+      const container = document.getElementById('search-results');
+      container.innerHTML = '<div class="loading-card"><div class="skeleton" style="width:52px;height:52px;border-radius:50%;flex-shrink:0"></div><div style="flex:1;display:flex;flex-direction:column;gap:6px"><div class="skeleton" style="height:14px;width:60%"></div><div class="skeleton" style="height:10px;width:40%"></div></div></div>'.repeat(3);
+
+      const { data, error } = await sb
+        .from('profiles')
+        .select('id, pseudo, discriminator, avatar_url')
+        .ilike('pseudo', `%${q}%`)
+        .neq('id', currentUser.id)
+        .limit(20);
+
+      if (error) { showMsg('Search failed.', 'error'); container.innerHTML = ''; return; }
+      if (!data || data.length === 0) {
+        container.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⚔</div><p class="empty-state-text">No Brother found</p></div>`;
+        return;
+      }
+
+      // Fetch relation statuses
+      const { data: relations } = await sb
+        .from('contacts')
+        .select('*')
+        .or(`requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id}`);
+
+      const relMap = {};
+      (relations || []).forEach(r => {
+        const other = r.requester_id === currentUser.id ? r.addressee_id : r.requester_id;
+        relMap[other] = { status: r.status, isRequester: r.requester_id === currentUser.id };
+      });
+
+      container.innerHTML = '';
+      data.forEach(p => {
+        const rel = relMap[p.id];
+        let actionHtml = '';
+        if (!rel) {
+          actionHtml = `<button class="btn btn-sm" onclick="sendRequest('${p.id}', this)">Add</button>`;
+        } else if (rel.status === 'accepted') {
+          actionHtml = `<button class="btn btn-sm" onclick="openConversation('${p.id}')">Message</button>`;
+        } else if (rel.status === 'pending' && rel.isRequester) {
+          actionHtml = `<button class="btn btn-sm" disabled>Sent</button>`;
+        } else if (rel.status === 'pending' && !rel.isRequester) {
+          actionHtml = `<button class="btn btn-sm btn-success" onclick="acceptRequest('${p.id}', this)">Accept</button>`;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'member-card';
+        card.innerHTML = `
+          <img class="member-avatar" src="${avatarUrl(p)}" alt="${p.pseudo}">
+          <div class="member-info">
+            <span class="member-name">${p.pseudo || '—'}</span>
+            <span class="member-disc">#${p.discriminator || '0000'}</span>
+          </div>
+          <div class="member-actions">${actionHtml}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // ─── SEND REQUEST ─────────────────────────────────────────────────────────
+    window.sendRequest = async function(addresseeId, btn) {
+      btn.disabled = true;
+      btn.textContent = '...';
+      const { error } = await sb.from('contacts').insert({
+        requester_id: currentUser.id,
+        addressee_id: addresseeId,
+        status: 'pending'
+      });
+      if (error) {
+        showMsg('Could not send request.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Add';
+      } else {
+        btn.textContent = 'Sent';
+        btn.classList.add('btn-success');
+        showMsg('Request sent, Brother.', 'success');
+      }
+    };
+
+    // ─── ACCEPT REQUEST ───────────────────────────────────────────────────────
+    window.acceptRequest = async function(requesterId, btn) {
+      btn.disabled = true;
+      const { error } = await sb.from('contacts')
+        .update({ status: 'accepted' })
+        .eq('requester_id', requesterId)
+        .eq('addressee_id', currentUser.id);
+      if (error) { showMsg('Error.', 'error'); btn.disabled = false; return; }
+      btn.textContent = 'Brother!';
+      showMsg('New Brother welcomed into the Chapter.', 'success');
+      await loadRequests();
+    };
+
+    // ─── REMOVE CONTACT ───────────────────────────────────────────────────────
+    window.removeContact = async function(otherId, el) {
+      const { error } = await sb.from('contacts')
+        .delete()
+        .or(`and(requester_id.eq.${currentUser.id},addressee_id.eq.${otherId}),and(requester_id.eq.${otherId},addressee_id.eq.${currentUser.id})`);
+      if (error) { showMsg('Error removing contact.', 'error'); return; }
+      el.closest('.contact-item')?.remove();
+      showMsg('Contact removed.', 'success');
+    };
+
+    // ─── OPEN CONVERSATION ────────────────────────────────────────────────────
+    window.openConversation = function(otherId) {
+      window.location.href = `messages.html?with=${otherId}`;
+    };
+
+    // ─── LOAD CONTACTS ────────────────────────────────────────────────────────
+    async function loadContacts() {
+      const container = document.getElementById('contacts-list');
+      container.innerHTML = '<p style="color:var(--text-muted);font-family:Cinzel,serif;font-size:0.7rem;letter-spacing:0.2em;">Loading...</p>';
+
+      const { data, error } = await sb
+        .from('contacts')
+        .select('*, requester:requester_id(id,pseudo,discriminator,avatar_url), addressee:addressee_id(id,pseudo,discriminator,avatar_url)')
+        .or(`requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id}`)
+        .eq('status', 'accepted');
+
+      if (error || !data || data.length === 0) {
+        container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🛡</div><p class="empty-state-text">No contacts yet — search for Battle-Brothers</p></div>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      data.forEach(rel => {
+        const other = rel.requester_id === currentUser.id ? rel.addressee : rel.requester;
+        if (!other) return;
+        const item = document.createElement('div');
+        item.className = 'contact-item';
+        item.innerHTML = `
+          <img class="member-avatar" src="${avatarUrl(other)}" alt="${other.pseudo}">
+          <div class="member-info" style="flex:1">
+            <span class="member-name">${other.pseudo || '—'}</span>
+            <span class="member-disc">#${other.discriminator || '0000'}</span>
+          </div>
+          <div class="member-actions" style="display:flex;gap:0.4rem">
+            <button class="btn btn-sm" onclick="openConversation('${other.id}')">Message</button>
+            <button class="btn btn-sm btn-danger" onclick="removeContact('${other.id}', this)">Remove</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // ─── LOAD REQUESTS ────────────────────────────────────────────────────────
+    async function loadRequests() {
+      const container = document.getElementById('requests-list');
+      container.innerHTML = '';
+
+      const { data, error } = await sb
+        .from('contacts')
+        .select('*, requester:requester_id(id,pseudo,discriminator,avatar_url)')
+        .eq('addressee_id', currentUser.id)
+        .eq('status', 'pending');
+
+      const badge = document.getElementById('requests-badge');
+      if (!data || data.length === 0) {
+        badge.style.display = 'none';
+        container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📯</div><p class="empty-state-text">No pending requests</p></div>`;
+        return;
+      }
+
+      badge.textContent = data.length;
+      badge.style.display = '';
+
+      data.forEach(req => {
+        const p = req.requester;
+        if (!p) return;
+        const item = document.createElement('div');
+        item.className = 'request-item';
+        item.style.position = 'relative';
+        item.innerHTML = `
+          <img class="member-avatar" src="${avatarUrl(p)}" alt="${p.pseudo}">
+          <div class="member-info" style="flex:1">
+            <span class="member-name">${p.pseudo || '—'}</span>
+            <span class="member-disc">#${p.discriminator || '0000'}</span>
+          </div>
+          <div style="display:flex;gap:0.4rem">
+            <button class="btn btn-sm btn-success" onclick="acceptRequest('${p.id}', this)">Accept</button>
+            <button class="btn btn-sm btn-danger" onclick="denyRequest('${p.id}', this)">Deny</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    window.denyRequest = async function(requesterId, btn) {
+      btn.disabled = true;
+      await sb.from('contacts').delete().eq('requester_id', requesterId).eq('addressee_id', currentUser.id);
+      btn.closest('.request-item')?.remove();
+      await loadRequests();
+    };
+
+    // ─── INIT ─────────────────────────────────────────────────────────────────
+    async function init() {
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) { window.location.href = 'login.html'; return; }
+      currentUser = session.user;
+      await initNav(currentUser);
+
+      // Check pending requests count on load
+      const { data } = await sb.from('contacts').select('id').eq('addressee_id', currentUser.id).eq('status', 'pending');
+      if (data && data.length > 0) {
+        const badge = document.getElementById('requests-badge');
+        badge.textContent = data.length;
+        badge.style.display = '';
+      }
+    }
+
+    init();
+  })();
+  </script>
+</body>
+</html>

@@ -444,7 +444,7 @@
       e.preventDefault();
       const btn = document.getElementById('btn-save');
       btn.disabled    = true;
-      btn.textContent = 'Sauvegarde...';
+      btn.textContent = 'Saving...';
 
       const pseudo     = document.getElementById('input-Username').value.trim();
       let   avatar_url = currentProfile.avatar_url;
@@ -463,7 +463,7 @@
           console.error('[DIAG] ❌ Erreur upload avatar :', uploadError);
           showMsg('Erreur upload avatar : ' + uploadError.message, 'error');
           btn.disabled    = false;
-          btn.textContent = 'Sauvegarder';
+          btn.textContent = 'Save';
           return;
         }
 
@@ -489,11 +489,11 @@
         document.getElementById('Username-display').innerHTML =
           `${pseudo}<span>#${currentProfile.discriminator || '0000'}</span>`;
         showMsg('Profil mis à jour, Frère.', 'success');
-        console.log('[DIAG] ✅ Profil sauvegardé');
+        console.log('[DIAG] ✅ Profil Saved successfully');
       }
 
       btn.disabled    = false;
-      btn.textContent = 'Sauvegarder';
+      btn.textContent = 'Save';
     }
 
     // ─── LOGOUT ───────────────────────────────────────────────────────────────

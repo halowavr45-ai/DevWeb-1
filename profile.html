@@ -301,7 +301,7 @@
 
     <a href="index.html" class="back-link">← Return to site</a>
   </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // ─── DIAGNOSTIC : SDK chargé ? ───────────────────────────────────────────
     if (typeof window.supabase === 'undefined') {
@@ -318,7 +318,8 @@
     const SUPABASE_URL  = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZ3dncnNscG1tbm1ndHd6cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxNjM3NDcsImV4cCI6MjA5NTczOTc0N30.oGAQVRdp52Ay3rhmgOJzVRP24jQU50jtk9HPH38Poyc';
     const { createClient } = window.supabase;
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+    window._sb = window._sb || createClient(SUPABASE_URL, SUPABASE_ANON);
+    const supabase = window._sb;
     console.log('[DIAG] ✅ Client Supabase créé');
 
     let currentUser    = null;

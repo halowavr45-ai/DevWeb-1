@@ -304,53 +304,102 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
+    // ─── DIAGNOSTIC : SDK chargé ? ───────────────────────────────────────────
+    if (typeof window.supabase === 'undefined') {
+      document.getElementById('loading').classList.add('error-state');
+      document.getElementById('loading').innerHTML =
+        'Erreur : le SDK Supabase n\'a pas pu être chargé.<br>' +
+        '<small style="opacity:0.7">Vérifiez votre connexion internet ou un éventuel bloqueur de pub.</small><br><br>' +
+        '<a href="index.html" style="color:var(--gold);font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.2em;">← Retour au site</a>';
+      throw new Error('[DIAG] Supabase SDK manquant — window.supabase est undefined');
+    }
+    console.log('[DIAG] ✅ SDK Supabase chargé');
+
+    // ─── INIT SUPABASE ────────────────────────────────────────────────────────
+    const SUPABASE_URL  = 'https://pkgwgrslpmmnmgtwzrpb.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrZ3dncnNscG1tbm1ndHd6cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxNjM3NDcsImV4cCI6MjA5NTczOTc0N30.oGAQVRdp52Ay3rhmgOJzVRP24jQU50jtk9HPH38Poyc';
     const { createClient } = window.supabase;
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+    console.log('[DIAG] ✅ Client Supabase créé');
 
-    let currentUser = null;
+    let currentUser    = null;
     let currentProfile = null;
-    let newAvatarFile = null;
+    let newAvatarFile  = null;
 
+    // ─── HELPERS ──────────────────────────────────────────────────────────────
     function showLoadingError(message) {
       const el = document.getElementById('loading');
+      el.style.display = 'block';
       el.classList.add('error-state');
       el.innerHTML = message;
     }
 
+    function showMsg(text, type) {
+      const el = document.getElementById('msg');
+      el.textContent = text;
+      el.className = `msg ${type} show`;
+    }
+
+    // ─── INIT ─────────────────────────────────────────────────────────────────
     async function init() {
+      console.log('[DIAG] init() démarré');
+
       // 1. Vérification de la session
       let session;
       try {
+        console.log('[DIAG] Appel getSession()...');
         const { data, error } = await supabase.auth.getSession();
+        console.log('[DIAG] getSession() résultat :', { data, error });
+
         if (error) throw error;
         session = data.session;
       } catch (err) {
-        showLoadingError('Erreur de connexion à Supabase.<br>' + err.message);
+        console.error('[DIAG] ❌ Erreur getSession() :', err);
+        showLoadingError(
+          'Erreur de connexion à Supabase.<br>' +
+          '<small style="opacity:0.7">' + err.message + '</small><br><br>' +
+          '<a href="index.html" style="color:var(--gold);font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.2em;">← Retour au site</a>'
+        );
         return;
       }
 
+      // 2. Pas de session → redirect login
       if (!session) {
+        console.warn('[DIAG] ⚠️ Pas de session active → redirect vers login.html');
         window.location.href = 'login.html';
         return;
       }
 
+      console.log('[DIAG] ✅ Session trouvée pour :', session.user.email);
       currentUser = session.user;
 
-      // 2. Récupération du profil
+      // 3. Récupération du profil
       let profile;
       try {
+        console.log('[DIAG] Appel profiles.select() pour id =', currentUser.id);
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', currentUser.id)
           .maybeSingle();
 
+        console.log('[DIAG] profiles.select() résultat :', { data, error });
+
         if (error) throw error;
-        // Si pas de ligne profil, on crée un profil vide par défaut
-        profile = data || { id: currentUser.id, pseudo: '', discriminator: '0000', avatar_url: null };
+
+        // Pas de ligne profil → profil vide par défaut
+        profile = data || {
+          id: currentUser.id,
+          pseudo: '',
+          discriminator: '0000',
+          avatar_url: null
+        };
+
+        if (!data) {
+          console.warn('[DIAG] ⚠️ Aucun profil trouvé en base → profil vide utilisé');
+        }
       } catch (err) {
+        console.error('[DIAG] ❌ Erreur chargement profil :', err);
         showLoadingError(
           'Impossible de charger votre profil.<br>' +
           '<small style="opacity:0.7">' + err.message + '</small><br><br>' +
@@ -361,23 +410,24 @@
 
       currentProfile = profile;
 
-      // 3. Affichage
+      // 4. Affichage
+      console.log('[DIAG] ✅ Profil chargé :', profile);
       document.getElementById('loading').style.display = 'none';
       document.getElementById('profile-card').style.display = 'block';
 
       document.getElementById('input-Username').value = profile.pseudo || '';
-      document.getElementById('input-email').value = currentUser.email || '';
+      document.getElementById('input-email').value    = currentUser.email || '';
       document.getElementById('Username-display').innerHTML =
         `${profile.pseudo || '—'}<span>#${profile.discriminator || '0000'}</span>`;
 
-      if (profile.avatar_url) {
-        document.getElementById('avatar-preview').src = profile.avatar_url;
-      } else {
-        document.getElementById('avatar-preview').src =
-          `https://api.dicebear.com/7.x/bottts/svg?seed=${profile.pseudo || currentUser.id}`;
-      }
+      document.getElementById('avatar-preview').src = profile.avatar_url
+        ? profile.avatar_url
+        : `https://api.dicebear.com/7.x/bottts/svg?seed=${profile.pseudo || currentUser.id}`;
+
+      console.log('[DIAG] ✅ Page profil affichée avec succès');
     }
 
+    // ─── AVATAR ───────────────────────────────────────────────────────────────
     function handleAvatarChange(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -389,66 +439,79 @@
       reader.readAsDataURL(file);
     }
 
+    // ─── SAVE ─────────────────────────────────────────────────────────────────
     async function handleSave(e) {
       e.preventDefault();
       const btn = document.getElementById('btn-save');
-      btn.disabled = true;
+      btn.disabled    = true;
       btn.textContent = 'Sauvegarde...';
 
-      const pseudo = document.getElementById('input-Username').value.trim();
-      let avatar_url = currentProfile.avatar_url;
+      const pseudo     = document.getElementById('input-Username').value.trim();
+      let   avatar_url = currentProfile.avatar_url;
 
       // Upload avatar si changé
       if (newAvatarFile) {
-        const ext = newAvatarFile.name.split('.').pop();
+        const ext  = newAvatarFile.name.split('.').pop();
         const path = `avatars/${currentUser.id}.${ext}`;
+        console.log('[DIAG] Upload avatar vers :', path);
+
         const { error: uploadError } = await supabase.storage
           .from('avatars')
           .upload(path, newAvatarFile, { upsert: true });
 
         if (uploadError) {
+          console.error('[DIAG] ❌ Erreur upload avatar :', uploadError);
           showMsg('Erreur upload avatar : ' + uploadError.message, 'error');
-          btn.disabled = false;
+          btn.disabled    = false;
           btn.textContent = 'Sauvegarder';
           return;
         }
 
         const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(path);
-        avatar_url = urlData.publicUrl;
+        avatar_url    = urlData.publicUrl;
         newAvatarFile = null;
+        console.log('[DIAG] ✅ Avatar uploadé, URL :', avatar_url);
       }
 
+      // Mise à jour du profil
+      console.log('[DIAG] Update profil :', { pseudo, avatar_url });
       const { error } = await supabase
         .from('profiles')
         .update({ pseudo, avatar_url })
         .eq('id', currentUser.id);
 
       if (error) {
+        console.error('[DIAG] ❌ Erreur update profil :', error);
         showMsg('Erreur : ' + error.message, 'error');
       } else {
-        currentProfile.pseudo = pseudo;
+        currentProfile.pseudo     = pseudo;
         currentProfile.avatar_url = avatar_url;
         document.getElementById('Username-display').innerHTML =
           `${pseudo}<span>#${currentProfile.discriminator || '0000'}</span>`;
         showMsg('Profil mis à jour, Frère.', 'success');
+        console.log('[DIAG] ✅ Profil sauvegardé');
       }
 
-      btn.disabled = false;
+      btn.disabled    = false;
       btn.textContent = 'Sauvegarder';
     }
 
+    // ─── LOGOUT ───────────────────────────────────────────────────────────────
     async function handleLogout() {
+      console.log('[DIAG] Logout...');
       await supabase.auth.signOut();
       window.location.href = 'index.html';
     }
 
-    function showMsg(text, type) {
-      const el = document.getElementById('msg');
-      el.textContent = text;
-      el.className = `msg ${type} show`;
-    }
-
-    init();
+    // ─── LANCEMENT ────────────────────────────────────────────────────────────
+    init().catch(err => {
+      console.error('[DIAG] ❌ Erreur non catchée dans init() :', err);
+      showLoadingError(
+        'Une erreur inattendue est survenue.<br>' +
+        '<small style="opacity:0.7">' + err.message + '</small><br><br>' +
+        '<a href="index.html" style="color:var(--gold);font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.2em;">← Retour au site</a>'
+      );
+    });
   </script>
 </body>
 </html>
